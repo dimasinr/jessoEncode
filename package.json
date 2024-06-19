@@ -11,5 +11,10 @@
       "encoder"
     ],
   "author": "dimasinr",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "buffer": "^6.0.3",
+    "crypto-js": "^4.1.1"
+  }
+  
 }

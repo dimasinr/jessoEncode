@@ -1,4 +1,5 @@
-const crypto = require("crypto");
+const { Buffer } = require("buffer");
+const CryptoJS = require("crypto-js");
 
 function base64UrlEncode(str) {
   return Buffer.from(str)
@@ -27,9 +28,8 @@ function jessEncode(payload, secret) {
 }
 
 function sign(str, secret) {
-  return base64UrlEncode(
-    crypto.createHmac("sha256", secret).update(str).digest("base64")
-  );
+  const hash = CryptoJS.HmacSHA256(str, secret);
+  return base64UrlEncode(CryptoJS.enc.Base64.stringify(hash));
 }
 
 module.exports = {
