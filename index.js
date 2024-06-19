@@ -38,16 +38,16 @@ function jessEncode(payload, secret) {
 
 function jessDecode(token, secret) {
     const [encodedHeader, encodedPayload, signature] = token.split('.');
-    const header = JSON.parse(base64UrlDecode(encodedHeader));
-    const payload = JSON.parse(base64UrlDecode(encodedPayload));
-    
-    const validSignature = sign(`${encodedHeader}.${encodedPayload}`, secret);
-    if (validSignature !== signature) {
+    const data = JSON.parse(base64UrlDecode(encodedPayload));
+  
+    const validSignature = verify(`${encodedHeader}.${encodedPayload}`, signature, secret);
+    if (!validSignature) {
       throw new Error('Invalid signature');
     }
   
-    return { header, payload };
+    return {data};
   }
+  
 
 function sign(str, secret) {
   const hash = CryptoJS.HmacSHA256(str, secret);
