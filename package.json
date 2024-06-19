@@ -1,6 +1,6 @@
 {
   "name": "jesso",
-  "version": "1.1.2",
+  "version": "1.1.12",
   "description": "Jesso is simple JWT Decoder",
   "main": "index.js",
   "scripts": {
