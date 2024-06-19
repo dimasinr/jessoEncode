@@ -1,6 +1,6 @@
 {
   "name": "jesso",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Jesso is simple JWT Decoder",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,8 @@
   },
   "keywords": [
       "jwt",
-      "encoder"
+      "encoder",
+      "decoder"
     ],
   "author": "dimasinr",
   "license": "ISC",
