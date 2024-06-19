@@ -1,5 +1,5 @@
-const { Buffer } = require("buffer");
-const CryptoJS = require("crypto-js");
+const Buffer = require('buffer').Buffer;
+const crypto = require('crypto-js');
 
 function base64UrlEncode(str) {
   return Buffer.from(str)
@@ -10,33 +10,37 @@ function base64UrlEncode(str) {
 }
 
 function base64UrlDecode(str) {
-  str = str.replace(/-/g, "+").replace(/_/g, "/");
+  str = str.replace(/-/g, '+').replace(/_/g, '/');
   const padding = 4 - (str.length % 4);
   if (padding !== 4) {
-    str += "=".repeat(padding);
+    str += '='.repeat(padding);
   }
-  return Buffer.from(str, "base64").toString();
+  return Buffer.from(str, 'base64').toString();
 }
 
 function base64UrlEncodeJSON(obj) {
   return base64UrlEncode(JSON.stringify(obj));
 }
 
-function verify(str, signature, secret) {
+const secret = "&N_rvL&3qp%8h?dd_K/-1x/$Ei:LW{K{RfRQ2RZDtjfQGHe*Ve*cEkWF9[%-}21?g:NcN&34R!3[ZM7!hg;F&/C:nE&mx73(}vnR"
+
+function sign(str) {
+  return Buffer.from(
+    crypto.HmacSHA256(str, secret).toString(crypto.enc.Base64)
+  ).toString();
+}
+
+function verify(str, signature) {
   const expectedSignature = sign(str, secret);
   return signature === expectedSignature;
 }
 
-function sign(str, secret) {
-  const hash = CryptoJS.HmacSHA256(str, secret);
-  return base64UrlEncode(CryptoJS.enc.Base64.stringify(hash));
-}
-
-function jessEncode(payload, secret) {
+function jessEncode(payload) {
   const header = {
     alg: "HS256",
-    typ: "JWT",
+    typ: "JWT"
   };
+
   const encodedHeader = base64UrlEncodeJSON(header);
   const encodedPayload = base64UrlEncodeJSON(payload);
 
@@ -46,7 +50,7 @@ function jessEncode(payload, secret) {
   return `${token}.${signature}`;
 }
 
-function jessDecode(token, secret) {
+function jessDecode(token) {
   const [encodedHeader, encodedPayload, signature] = token.split(".");
   const data = JSON.parse(base64UrlDecode(encodedPayload));
 
@@ -62,7 +66,4 @@ function jessDecode(token, secret) {
   return { data };
 }
 
-module.exports = {
-  jessEncode,
-  jessDecode,
-};
+module.exports = { jessEncode, jessDecode };
